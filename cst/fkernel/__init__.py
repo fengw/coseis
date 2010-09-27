@@ -7,7 +7,7 @@ from ..conf import launch
 
 path = os.path.dirname( os.path.realpath( __file__ ) )
 
-def _build( mode=None, optimize=None ):
+def _build( optimize=None ):
     """
     Build code
     """
@@ -18,14 +18,11 @@ def _build( mode=None, optimize=None ):
     mode = cf.mode
     if not mode:
         mode = 'm'
-    
     source = 'signal.f90', 'ker_utils.f90', 'cpt_ker.f90'
     new = False
     cwd = os.getcwd()
-    src = os.path.join( path, 'src' )
     bld = os.path.join( os.path.dirname( path ), 'build' ) + os.sep
-    os.chdir( src )
-
+    os.chdir( path )
     if not os.path.isdir( bld ):
         os.mkdir( bld )
     if 'm' in mode and cf.fortran_mpi[0]:
@@ -59,19 +56,15 @@ def stage( inputs={}, **kwargs ):
         job.mode = 'm'
     if job.mode != 'm':
         sys.exit( 'Must be MPI' )
-    
-    # partition and resources
-    
-    # configure options
     job.command = os.path.join( '.', 'cpt_ker-' + job.mode + job.optimize + ' in/input_files' )
-    job = cst.conf.prepare( job )  # display the resouces used in the computation
+    job = cst.conf.prepare( job )
 
     # build
     if not job.prepare:
         return job
     _build( job.mode, job.optimize )
 
-    # create run directory (need work)
+    # create run directory
     cst.conf.skeleton( job )
     shutil.copytree( 'tmp', os.path.join( job.rundir, 'in' ) )
     f = os.path.join( job.rundir, 'out' )

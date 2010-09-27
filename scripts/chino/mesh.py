@@ -2,12 +2,9 @@
 """
 Mesh generation
 """
-import os
 import numpy as np
+import cst
 import meta
-
-# location
-rundir = 'cvm4' + os.sep
 
 # metedata
 dtype = meta.dtype
@@ -17,10 +14,15 @@ npml = meta.npml
 ntop = meta.ntop
 
 # read data
+dep = np.arange( shape[2] ) * delta[2]
 n = shape[:2]
 x = np.fromfile( 'lon', dtype ).reshape( n[::-1] ).T
 y = np.fromfile( 'lat', dtype ).reshape( n[::-1] ).T
 z = np.fromfile( 'topo', dtype ).reshape( n[::-1] ).T
+
+# demean topography
+z0 = z.mean()
+z -= z0
 
 # PML regions are extruded
 for w in x, y, z:
@@ -34,16 +36,12 @@ for w in x, y, z:
 n = shape[2] - ntop - npml
 w = 1.0 - np.r_[ np.zeros(ntop), 1.0 / (n - 1) * np.arange(n), np.ones(npml) ]
 
-# demean topography
-z0 = z.mean()
-z -= z0
-
 # node elevation mesh
-dep = np.arange( shape[2] ) * delta[2]
-f3 = open( 'z3', 'wb' )
-for i in range( dep.size ):
-    (dep[i] + z0 + w[i] * z).T.tofile( f3 )
-f3.close()
+fh = cst.util.open_excl( 'z3', 'wb' )
+if fh:
+    for i in range( dep.size ):
+        (dep[i] + z0 + w[i] * z).T.tofile( fh )
+    fh.close()
 
 # cell center locations
 dep = 0.5 * (dep[:-1] + dep[1:])
@@ -55,15 +53,25 @@ z = 0.25 * (z[:-1,:-1] + z[1:,:-1] + z[:-1,1:] + z[1:,1:])
 n = shape[2] - ntop - npml
 w = np.r_[ np.zeros(ntop), 1.0 / n * (0.5 + np.arange(n)), np.ones(npml) ]
 
-# write lon/lat/depth mesh
-f1 = open( rundir + 'lon', 'wb' )
-f2 = open( rundir + 'lat', 'wb' )
-f3 = open( rundir + 'dep', 'wb' )
-for i in range( dep.size ):
-    x.T.tofile( f1 )
-    y.T.tofile( f2 )
-    np.array( w[i] * z - dep[i], 'f' ).T.tofile( f3 )
-f1.close()
-f2.close()
-f3.close()
+# write dep file
+d = 'cvm/'
+fh = cst.util.open_excl( d + 'dep', 'wb' )
+if fh:
+    for i in range( dep.size ):
+        (w[i] * z - dep[i]).astype( 'f' ).T.tofile( fh )
+    fh.close()
+
+# write lon file
+fh = cst.util.open_excl( d + 'lon', 'wb' )
+if fh:
+    for i in range( dep.size ):
+        x.T.tofile( fh )
+    fh.close()
+
+# write lat file
+fh = cst.util.open_excl( d + 'lat', 'wb' )
+if fh:
+    for i in range( dep.size ):
+        y.T.tofile( fh )
+    fh.close()
 

@@ -1,23 +1,24 @@
 #!/bin/bash -e
-prefix="${1:-${SCRATCHDIR}/local}"
-pwd="${PWD}"
-
 # Install statically linked Python for Compute Node Linux on NICS Kraken
 # http://yt.enzotools.org/wiki/KrakenCommunityInstallation
 
+module swap PrgEnv-pgi PrgEnv-gnu
+module load git vim
+
+pwd="${PWD}"
+cd "${SCRATCHDIR}"
+
 # yt python vertion
-url='http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.9.tar.gz'
-url='http://bitbucket.org/ianb/virtualenv/get/tip.gz#egg=virtualenv-tip'
-cd "${prefix}"
-curl -L "${url}" | tar zx
-/lustre/scratch/proj/yt_common/trunk/bin/python virtualenv/virtualenv.py .
-. bin/activate
-
-# Coseis path
-cd "${HOME}/coseis"
-python setup.py path
-
+virtualenv --python=/lustre/scratch/proj/yt_common/2.0/bin/python local
+. local/bin/activate
 pip install pyproj
+
+# Coseis
+git clone git@github.com:gely/coseis.git
+cd coseis
+python setup.py path
+python setup.py --machine=nics-kraken
+python setup.py build
 
 cd "${pwd}"
 
