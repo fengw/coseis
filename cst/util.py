@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 General utilities
 """
@@ -252,8 +251,4 @@ def progress( t0=None, i=None, n=None, message='' ):
     if i == n:
         print('')
     return
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
 

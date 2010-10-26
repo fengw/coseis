@@ -9,7 +9,7 @@ import cst
 
 # parameters
 nproc = 1
-template = 'wsconf-in.py'
+template = 'ws-meta-in.py'
 author = 'Geoffrey Ely'
 title = 'Chino Hills'
 scale = 0.001
@@ -21,7 +21,7 @@ for path in glob.glob( sims ):
 
     # skip if already exists
     path += os.sep
-    if not force and os.path.exists( path + 'wsconf.py' ):
+    if not force and os.path.exists( path + 'ws-meta.py' ):
         continue
     print path
 
@@ -32,10 +32,10 @@ for path in glob.glob( sims ):
     proj = pyproj.Proj( **meta.projection )
 
     # snapshot and time history dimensions
-    x, y, t = meta.shapes['snap-v1']; nsnap = x, y, t
-    x, y, t = meta.shapes['hist-v1']; nhist = t, x, y
-    x, y, t = meta.deltas['snap-v1']; dsnap = scale * x, scale * y, t
-    x, y, t = meta.deltas['hist-v1']; dhist = t, scale * x, scale * y
+    x, y, t = meta.shapes['snap-v1.bin']; nsnap = x, y, t
+    x, y, t = meta.shapes['hist-v1.bin']; nhist = t, x, y
+    x, y, t = meta.deltas['snap-v1.bin']; dsnap = scale * x, scale * y, t
+    x, y, t = meta.deltas['hist-v1.bin']; dhist = t, scale * x, scale * y
 
     # adjust bounds for WebSims (should fix WebSims instead)
     x, y = bounds[:2]
@@ -50,8 +50,8 @@ for path in glob.glob( sims ):
     vticks = 0, vscale, 2 * vscale
     uticks = 0, uscale, 2 * uscale
     meta.__dict__.update( locals() )
-    wsconf = open( template ).read()
-    open( path + 'wsconf.py', 'w' ).write( wsconf % meta.__dict__ )
+    wsmeta = open( template ).read()
+    open( path + 'ws-meta.py', 'w' ).write( wsmeta % meta.__dict__ )
 
     # topography
     topo, extent = cst.data.topo( extent )
@@ -81,11 +81,11 @@ for path in glob.glob( sims ):
     # surface Vs
     j, k = nsnap[:2]
     n = j * k
-    post = 'rm lon lat dep rho vp\nmv vs %s/vs0' % os.path.realpath( path )
+    post = 'rm lon.bin lat.bin dep.bin rho.bin vp.bin\nmv vs.bin %s/vs0.bin' % os.path.realpath( path )
     job = cst.cvm.stage( nsample=n, nproc=nproc, post=post, workdir='run', run='exec' )
     rundir = job.rundir + os.sep
-    shutil.copy2( path + 'lon', rundir + 'lon' )
-    shutil.copy2( path + 'lat', rundir + 'lat' )
-    np.zeros( n, 'f' ).tofile( rundir + 'dep' )
+    shutil.copy2( path + 'lon', rundir + 'lon.bin' )
+    shutil.copy2( path + 'lat', rundir + 'lat.bin' )
+    np.zeros( n, 'f' ).tofile( rundir + 'dep.bin' )
     cst.cvm.launch( job )
 

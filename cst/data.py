@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Mapping data utilities
 """
@@ -356,8 +355,4 @@ def downsample_sphere( f, d ):
     g *= 1.0 / (d * d)
     return g
 
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
 

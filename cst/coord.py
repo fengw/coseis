@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Coordinate conversions
 """
@@ -417,8 +416,8 @@ class Transform():
             x += self.mat[0,2]
             y += self.mat[1,2]
         else:
-            x -= self.mat[0,2]
-            y -= self.mat[1,2]
+            x = x - self.mat[0,2]
+            y = y - self.mat[1,2]
             x, y = solve2( self.mat[:2,:2], [x, y] )
             if proj != None:
                 x, y = proj( x, y, **kwarg )
@@ -531,9 +530,4 @@ def compass( azimuth, radians=False ):
         'W', 'WNW', 'NW', 'NNW',
     )
     return names[ int( (azimuth / 22.5 + 0.5) % 16.0 ) ]
-
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
 

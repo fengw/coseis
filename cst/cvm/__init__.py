@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 SCEC Community Velocity Model
 """
@@ -45,14 +44,15 @@ def _build( mode=None, optimize=None ):
 
     # build directory
     cwd = os.getcwd()
-    os.chdir( path )
-    if not os.path.exists( 'build' ):
-        os.makedirs( 'build' )
+    bld = os.path.join( os.path.dirname( path ), 'build', 'cvm4' ) + os.sep
+    if not os.path.isdir( bld ):
+        os.makedirs( bld )
+        os.chdir( bld )
         fh = tarfile.open( tarball, 'r:gz' )
-        fh.extractall( 'build' )
-        if os.system( 'patch -p0 < cvm4.patch' ):
+        fh.extractall( bld )
+        if os.system( 'patch -p1 < %s' % os.path.join( path, 'cvm4.patch' ) ):
             sys.exit( 'Error patching CVM' )
-    os.chdir( 'build' )
+    os.chdir( bld )
 
     # compile ascii, binary, and MPI versions
     new = False
@@ -106,7 +106,7 @@ def stage( inputs={}, **kwargs ):
     _build( job.mode, job.optimize )
 
     # check minimum processors needed for compiled memory size
-    file = os.path.join( path, 'build', 'in.h' )
+    file = os.path.join( cst.path, 'build', 'cvm4', 'in.h' )
     string = open( file ).read()
     pattern = 'ibig *= *([0-9]*)'
     n = int( re.search( pattern, string ).groups()[0] )
@@ -120,7 +120,7 @@ def stage( inputs={}, **kwargs ):
     if job.force == True and os.path.isdir( job.rundir ):
         shutil.rmtree( job.rundir )
     if not os.path.exists( job.rundir ):
-        f = os.path.join( path, 'build' )
+        f = os.path.join( cst.path, 'build', 'cvm4' )
         shutil.copytree( f, job.rundir )
     else:
         for f in (
@@ -162,9 +162,9 @@ def extract( lon, lat, dep, prop=None, **kwargs ):
     shape = dep.shape
     job = stage( nsample=dep.size, **kwargs )
     path = job.rundir + os.sep
-    lon.tofile( path + 'lon' )
-    lat.tofile( path + 'lat' )
-    dep.tofile( path + 'dep' )
+    lon.tofile( path + 'lon.bin' )
+    lat.tofile( path + 'lat.bin' )
+    dep.tofile( path + 'dep.bin' )
     del( lon, lat, dep )
     launch( job, run='exec' )
     if prop is not None:
