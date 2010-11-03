@@ -36,7 +36,11 @@ fieldio += [
 # near side boundary conditions:
 # anti-mirror symmetry at the near x and y boundaries
 # free surface at the near z boundary
+<<<<<<< HEAD
 bc1 = -2, -2, 0
+=======
+bc1 = -2, -2, 0	
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 
 # far side boundary conditions:
 # PML absorbing boundaries at x, y and z boundaries

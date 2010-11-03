@@ -85,6 +85,7 @@ for path in glob.glob( sims ):
     f2.close()
 
     # surface Vs
+<<<<<<< HEAD
     x = np.fromfile( path + 'lon.bin', meta.dtype )
     y = np.fromfile( path + 'lat.bin', meta.dtype )
     z = np.zeros_like( x )
@@ -100,4 +101,15 @@ for path in glob.glob( sims ):
         rho.tofile( path + 'rho0.bin' )
         vp.tofile(  path + 'vp0.bin' )
         vs.tofile(  path + 'vs0.bin' )
+=======
+    j, k = nsnap[:2]
+    n = j * k
+    post = 'rm lon.bin lat.bin dep.bin rho.bin vp.bin\nmv vs.bin %s/vs0.bin' % os.path.realpath( path )
+    job = cst.cvm.stage( nsample=n, nproc=nproc, post=post, workdir='run', run='exec' )
+    rundir = job.rundir + os.sep
+    shutil.copy2( path + 'lon', rundir + 'lon.bin' )
+    shutil.copy2( path + 'lat', rundir + 'lat.bin' )
+    np.zeros( n, 'f' ).tofile( rundir + 'dep.bin' )
+    cst.cvm.launch( job )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 

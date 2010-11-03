@@ -267,10 +267,13 @@ def prepare_param( pm ):
     Prepare input paramers
     """
     import cst
+<<<<<<< HEAD
 
     # checks
     if pm.source not in ('potency', 'moment', 'force', 'none'):
         sys.exit( 'Error: unknown source type %r' % pm.source )
+=======
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 
     # inervals
     nt = pm.shape[3]

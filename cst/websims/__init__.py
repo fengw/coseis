@@ -198,9 +198,14 @@ def show2d( query ):
         delta = meta.x_delta
         shape = meta.x_shape
         panes = meta.x_static_panes
+<<<<<<< HEAD
         #dtype = np.dtype( meta.dtype )
         #ext = '.%s%s' % (dtype.kind, 8 * dtype.itemsize)
         ext = '.bin'
+=======
+        dtype = np.dtype( meta.dtype )
+        ext = '.%s%s' % (dtype.kind, 8 * dtype.itemsize)
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
         indices = [0, 0] + [1] * (len( shape ) - 2)
         if snapshot:
             panes = meta.x_panes
@@ -479,17 +484,31 @@ class download:
         path = os.path.join( conf.repo[0], query.ids, conf.meta )
         meta = util.load( path )
         indices = [ int(i) for i in query.j.split( ',' ) ]
+<<<<<<< HEAD
         found = True
         if filename in [ f for pane in meta.t_panes for f in pane[0] ]:
             shape = meta.t_shape
         elif filename in [ pane[0] for pane in meta.x_panes ]:
             shape = meta.x_shape
         elif filename in [ pane[0] for pane in meta.x_static_panes ]:
+=======
+        root, ext = os.path.splitext( filename )
+        found = True
+        if root in [ f for pane in meta.t_panes for f in pane[0] ]:
+            shape = meta.t_shape
+        elif root in [ pane[0] for pane in meta.x_panes ]:
+            shape = meta.x_shape
+        elif root in [ pane[0] for pane in meta.x_static_panes ]:
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
             shape = list( meta.x_shape[:-1] ) + [1]
         else:
             found = False
         for d in conf.repo:
+<<<<<<< HEAD
             path = os.path.join( d, query.ids, filename )
+=======
+            path = os.path.join( d, query.ids, root )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
             if os.path.exists( path ):
                 break
         else:
@@ -499,8 +518,28 @@ class download:
             raise web.notfound()
         v = util.ndread( path, shape, indices, dtype=meta.dtype )
         web.header( 'Cache-Control', 'max-age=%s' % cache_max_age )
+<<<<<<< HEAD
         web.header( 'Content-Type', 'application/octet-stream' )
         return v.tostring()
+=======
+        if ext == '.txt':
+            out = cStringIO.StringIO()
+            np.savetxt( out, v )
+            web.header( 'Content-Type', 'text/plain' )
+            return out.getvalue()
+        elif ext == '.gz':
+            out = cStringIO.StringIO()
+            gz = gzip.GzipFile( root, 'wb', 9, out )
+            np.savetxt( gz, v )
+            gz.close()
+            web.header( 'Content-Type', 'application/x-gzip' )
+            return out.getvalue()
+        elif ext == '.f32':
+            web.header( 'Content-Type', 'application/octet-stream' )
+            return v.tostring()
+        else:
+            return error( 'Unknown file type: ' + filename )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 
 
 app = web.application( urls, globals() )

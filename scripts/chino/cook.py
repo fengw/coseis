@@ -20,6 +20,7 @@ xdec = ihist[0][2] / ifull[0][2]
 tdec = isnap[2][2] / ifull[2][2]
 
 # open full resolution files for reading
+<<<<<<< HEAD
 f1 = open( 'full-v1.bin', 'rb' )
 f2 = open( 'full-v2.bin', 'rb' )
 f3 = open( 'full-v3.bin', 'rb' )
@@ -33,6 +34,21 @@ s3 = open( 'snap-v3.bin', 'wb' )
 h1 = open( 'hist-v1.bin', 'wb' )
 h2 = open( 'hist-v2.bin', 'wb' )
 h3 = open( 'hist-v3.bin', 'wb' )
+=======
+f1 = open( out + 'full-v1.bin', 'rb' )
+f2 = open( out + 'full-v2.bin', 'rb' )
+f3 = open( out + 'full-v3.bin', 'rb' )
+
+# open snapshot files for writing
+s1 = open( out + 'snap-v1.bin', 'wb' )
+s2 = open( out + 'snap-v2.bin', 'wb' )
+s3 = open( out + 'snap-v3.bin', 'wb' )
+
+# open time history files for writing
+h1 = open( out + 'hist-v1.bin', 'wb' )
+h2 = open( out + 'hist-v2.bin', 'wb' )
+h3 = open( out + 'hist-v3.bin', 'wb' )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 
 # initialize displacement, pgv, pgd arrays
 nn = nfull[:2]
@@ -100,6 +116,7 @@ del( v1, v2, v3, u1, u2, u3, pgv, pgd, pgvh, pgdh )
 # transpose time history arrays
 x, y, t = nhist
 n = t, x * y
+<<<<<<< HEAD
 np.fromfile( 'hist-v1.bin', dtype ).reshape( n ).T.tofile( 'hist-v1.bin' )
 np.fromfile( 'hist-v2.bin', dtype ).reshape( n ).T.tofile( 'hist-v2.bin' )
 np.fromfile( 'hist-v3.bin', dtype ).reshape( n ).T.tofile( 'hist-v3.bin' )
@@ -108,4 +125,14 @@ np.fromfile( 'hist-v3.bin', dtype ).reshape( n ).T.tofile( 'hist-v3.bin' )
 os.unlink( 'full-v1.bin' )
 os.unlink( 'full-v2.bin' )
 os.unlink( 'full-v3.bin' )
+=======
+np.fromfile( out + 'hist-v1.bin', dtype ).reshape( n ).T.tofile( out + 'hist-v1.bin' )
+np.fromfile( out + 'hist-v2.bin', dtype ).reshape( n ).T.tofile( out + 'hist-v2.bin' )
+np.fromfile( out + 'hist-v3.bin', dtype ).reshape( n ).T.tofile( out + 'hist-v3.bin' )
+
+# remove full resolution files and lock file
+os.unlink( out + 'full-v1.bin' )
+os.unlink( out + 'full-v2.bin' )
+os.unlink( out + 'full-v3.bin' )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 

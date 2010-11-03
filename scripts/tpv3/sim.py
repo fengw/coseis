@@ -85,7 +85,11 @@ for dx_, nproc3 in runs_:
         ( '=', 'ts',  [i,i,-2,()], 81.6e6 ),	# shear traction - nucleation patch
     ]
 
+<<<<<<< HEAD
     # write fault plane output
+=======
+    # Write fault plane output
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
     i0 = j, k, -2, 0
     i1 = j, k, -2, -1
     fieldio += [

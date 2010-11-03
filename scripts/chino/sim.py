@@ -140,6 +140,10 @@ for f in 'lon.bin', 'lat.bin', 'topo.bin':
     s[::ns,::ns].tofile( path_ + f )
 
 # copy input files
+<<<<<<< HEAD
+=======
+path_ += 'in' + os.sep
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 for f in 'z3.bin', 'rho.bin', 'vp.bin', 'vs.bin':
     os.link( mesh_ + f, path_ + f )
 

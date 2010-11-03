@@ -89,7 +89,11 @@ prof0(1) = timer(7)
 prof0(2) = timer(8)
 if ( master ) then
     call rio1( fh(9), prof0(:2), 'w', 'prof/main.bin', 16, 14, mpout, verb )
+<<<<<<< HEAD
     write( *, '(a)' ) 'Finished!'
+=======
+    write( 0, * ) 'Finished!'
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 end if
 call finalize
 

@@ -152,6 +152,67 @@ if cvm == 's':
         nproc = min( 4, nproc ),
     )
 
+<<<<<<< HEAD
     # launch cvm, wait for mesher
     cst.cvm.launch( job, depend=job0.jobid )
+=======
+    # save data
+    cst.util.save( path + 'meta.py', meta, header='# mesh parameters\n' )
+    np.savetxt( path + 'box.txt', np.array( box, 'f' ).T )
+    x.astype( 'f' ).T.tofile( path + 'lon.bin' )
+    y.astype( 'f' ).T.tofile( path + 'lat.bin' )
+    z.astype( 'f' ).T.tofile( path + 'topo.bin' )
+
+    # python executable
+    python = 'python'
+    if cst.site.machine == 'nics-kraken':
+        python = '/lustre/scratch/gely/local/bin/python'
+
+    if cvm == 'h':
+
+        # stage cvm
+        cvm_proj = pyproj.Proj( **cst.cvmh.projection )
+        x, y = cvm_proj( x, y )
+        x.astype( 'f' ).T.tofile( path + 'x.bin' )
+        y.astype( 'f' ).T.tofile( path + 'y.bin' )
+
+        # launch mesher
+        x, y, z = shape
+        s = x * y * z / 600000 # linear
+        s = x * y * z / 2000000 # nearest
+        print 'CVM-H wall time estimate: %s' % s
+        cst.conf.launch(
+            name = 'cvmh',
+            new = False,
+            rundir = path,
+            stagein = ['cvmh.py'],
+            command = '%s cvmh.py' % python,
+            seconds = s,
+            nproc = min( 4, nproc ),
+        )
+
+    if cvm == 's':
+
+        # stage cvm
+        rundir = path + 'cvm' + os.sep
+        post = 'rm lon.bin lat.bin dep.bin\nmv rho.bin vp.bin vs.bin %r' % path
+        n = (shape[0] - 1) * (shape[1] - 1) * (shape[2] - 1)
+        job = cst.cvm.stage( rundir=rundir, nproc=nproc, nsample=n, post=post )
+
+        # launch mesher
+        x, y, z = shape
+        s = x * y * z / 2000000
+        job0 = cst.conf.launch(
+            name = 'mesh',
+            new = False,
+            rundir = path,
+            stagein = ['mesh.py'],
+            command = '%s mesh.py' % python,
+            seconds = s,
+            nproc = min( 4, nproc ),
+        )
+
+        # launch cvm, wait for mesher
+        cst.cvm.launch( job, depend=job0.jobid )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 

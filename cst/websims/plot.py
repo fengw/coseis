@@ -68,11 +68,25 @@ def plot2d( id_, img_file, time='', decimate='' ):
 
     # search for pane
     root, img_ext = os.path.splitext( img_file )
+<<<<<<< HEAD
     p = dict( (p[0], p) for p in panes )
     ext = '.bin'
     if root in p:
         ext = ''
     pane = p[root + ext]
+=======
+    pane = None
+    ext = ''
+    p = dict( (p[0], p) for p in panes )
+    if root in p:
+        pane = p[root]
+    else:
+        d = np.dtype( meta.dtype )
+        e = '.%s%s' % (d.kind, 8 * d.itemsize)
+        if root + e in p:
+            pane = p[root + e]
+            ext = e
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 
     # search for file
     found = False

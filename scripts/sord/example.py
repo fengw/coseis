@@ -22,8 +22,13 @@ cst.sord.run( locals() )                    # launch SORD job
 import numpy as np
 import matplotlib.pyplot as plt
 n  = shape[1], shape[0]
+<<<<<<< HEAD
 vx = np.fromfile( 'run/vx.bin', 'f' ).reshape( n )
 vy = np.fromfile( 'run/vy.bin', 'f' ).reshape( n )
+=======
+vx = np.fromfile( 'run/out/vx.bin', 'f' ).reshape( n )
+vy = np.fromfile( 'run/out/vy.bin', 'f' ).reshape( n )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 vm = np.sqrt( vx * vx + vy * vy )
 fig = plt.figure( figsize=(3,3) )
 ax = plt.gca()

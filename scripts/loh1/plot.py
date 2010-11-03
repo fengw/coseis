@@ -25,9 +25,15 @@ axes = [ fig.add_subplot( 3, 1, i ) for i in 1, 2, 3 ]
 # SORD results
 rotation = np.array( [[3.0/5.0, 4.0/5.0, 0.0], [-4.0/5.0, 3.0/5.0, 0.0], [0.0, 0.0, 1.0]] )
 t = dt * np.arange( nt )
+<<<<<<< HEAD
 x = np.fromfile( so_dir + 'vx.bin', dtype )
 y = np.fromfile( so_dir + 'vy.bin', dtype )
 z = np.fromfile( so_dir + 'vz.bin', dtype )
+=======
+x = np.fromfile( so_dir + 'out/vx.bin', dtype )
+y = np.fromfile( so_dir + 'out/vy.bin', dtype )
+z = np.fromfile( so_dir + 'out/vz.bin', dtype )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 v = np.vstack( (x, y, z) )
 v = np.dot( rotation, v )
 tau = t - ts
@@ -43,9 +49,15 @@ for ax in axes:
 
 # Prose F/K results
 tm = np.fromfile( fk_dir + 'time.bin', '<f' )
+<<<<<<< HEAD
 v1 =  1e5 * np.fromfile( fk_dir + 'v-radial.bin', '<f' )
 v2 =  1e5 * np.fromfile( fk_dir + 'v-transverse.bin', '<f' )
 v3 = -1e5 * np.fromfile( fk_dir + 'v-vertical.bin', '<f' )
+=======
+v1 =  1e5 * np.fromfile( fk_dir + 'v-radial', '<f' )
+v2 =  1e5 * np.fromfile( fk_dir + 'v-transverse', '<f' )
+v3 = -1e5 * np.fromfile( fk_dir + 'v-vertical', '<f' )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 v = np.vstack((v1,v2,v3))
 dt = tm[1] - tm[0]
 tau = tm - ts

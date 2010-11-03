@@ -16,10 +16,17 @@ delta = meta.deltas['snap-v1.bin']
 nn = shape[:2]
 n = shape[0] * shape[1]
 fig = plt.figure()
+<<<<<<< HEAD
 x = np.fromfile( path + 'x.bin', dtype ).reshape( nn[::-1] ).T
 y = np.fromfile( path + 'y.bin', dtype ).reshape( nn[::-1] ).T
 f1 = open( path + 'snap-v1.bin' )
 f2 = open( path + 'snap-v2.bin' )
+=======
+x = np.fromfile( path + 'in/x.bin', dtype ).reshape( nn[::-1] ).T
+y = np.fromfile( path + 'in/y.bin', dtype ).reshape( nn[::-1] ).T
+f1 = open( path + 'out/snap-v1.bin' )
+f2 = open( path + 'out/snap-v2.bin' )
+>>>>>>> dcfdd1bad19ac9b2724a66f69ffabdb1e0dd9139
 
 for it in range( shape[-1] ):
     vx = np.fromfile( f1, dtype, n ).reshape( nn[::-1] ).T
