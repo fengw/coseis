@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
+<title>SORD</title>
+<style type="text/css">
+
+/* CSS stylesheet */
+
+body {
+    max-width: 760px;
+    padding: 0px;
+    margin: 0px auto;
+    background-color: #eee;
+    color: #000;
+    font-family: 'Lucida Grande', Geneva, Verdana, sans-serif;
+    position: relative;
+    line-height: 140%;
+}
+
+div.document {
+    background-color: #fff;
+    padding: 0px 60px;
+    border: 1px solid #ccc;
+}
+
+img {
+    border: none;
+    margin: 10px 0px;
+}
+
+img.plot {
+    margin: 0px -30px;
+}
+
+img.align-left, .figure.align-left {
+    clear: left;
+    float: left;
+    margin-right: 1em
+}
+
+img.align-right, .figure.align-right {
+    clear: right;
+    float: right;
+    margin-left: 1em
+}
+
+img.align-center, .figure.align-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #ccc;
+}
+
+pre {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    line-height: 100%;
+}
+
+a {
+    color: #06a;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    text-decoration: underline;
+}
+
+.section li {
+    padding: 5px;
+}
+
+h1, h1 a, h1 a:hover, h1 a:active {
+    color: #900;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+h2.subtitle {
+    font-size: large;
+    font-weight: normal;
+    margin-top: 5px;
+}
+
+h3 {
+    border-top: 2px solid #ccc;
+    padding-top: 10px;
+}
+
+form.search {
+    margin-left: 30px;
+}
+
+ul.navbar {
+    list-style-type: none;
+    padding: 0px;
+}
+
+.navbar li {
+    display: inline;
+}
+
+.navbar a {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.navbar a:hover, a:active {
+    background-color: #ccc;
+}
+
+div.box {
+    border: 1px solid #aaa;
+    margin: 30px 0px;
+}
+
+div.box form, div.box p, div.box ul, div.box h4 {
+    margin: 15px 30px;
+}
+
+div.box h3 {
+    background-color: #ccc;
+    padding: 4px 30px;
+    margin: 0px;
+    margin-bottom: 15px;
+    font-size: medium;
+}
+
+p.topic-title {
+    font-size: large;
+    font-weight: bold;
+}
+
+p.warning {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #ffd;
+}
+
+table {
+    width:100%;
+    border-collapse: collapse;
+    border: 1px solid #aaa;
+    margin: 30px 0px;
+}
+
+th {
+    padding: 4px 30px;
+    background-color: #ccc;
+    border: none;
+    text-align: left;
+}
+
+td {
+    padding: 4px 30px;
+    border: none;
+    border-top: 1px solid #eee;
+}
+
+
+</style>
+</head>
+<body>
+<div class="document" id="sord">
+<h1 class="title">SORD</h1>
+<h2 class="subtitle" id="support-operator-rupture-dynamics">Support Operator Rupture Dynamics</h2>
+
+<a class="reference external image-reference" href="http://earth.usc.edu/~gely/ely-saf-surface.mov"><img alt="ely-saf-surface.jpg" src="ely-saf-surface.jpg" /></a>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#summary" id="id1">Summary</a></li>
+<li><a class="reference internal" href="#publications" id="id2">Publications</a></li>
+<li><a class="reference internal" href="#user-guide" id="id3">User Guide</a><ul>
+<li><a class="reference internal" href="#quick-test" id="id4">Quick test</a></li>
+<li><a class="reference internal" href="#scripting-with-python" id="id5">Scripting with Python</a></li>
+<li><a class="reference internal" href="#running-jobs" id="id6">Running jobs</a></li>
+<li><a class="reference internal" href="#field-i-o" id="id7">Field I/O</a></li>
+<li><a class="reference internal" href="#boundary-conditions" id="id8">Boundary Conditions</a></li>
+<li><a class="reference internal" href="#defining-the-fault-rupture-surface" id="id9">Defining the fault rupture surface</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#memory-usage-and-scaling" id="id10">Memory Usage and Scaling</a><ul>
+<li><a class="reference internal" href="#achieving-i-o-performance" id="id11">Achieving I/O Performance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#development" id="id12">Development</a><ul>
+<li><a class="reference internal" href="#debugging" id="id13">Debugging</a></li>
+<li><a class="reference internal" href="#profiling" id="id14">Profiling</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h3>Summary</h3>
+<p>The Support Operator Rupture Dynamics (SORD) code simulates spontaneous rupture
+within a 3D isotropic viscoelastic solid.  Wave motions are computed on a
+logically rectangular hexahedral mesh, using the generalized finite difference
+method of support operators.  Stiffness and viscous hourglass corrections are
+employed to suppress suppress zero-energy grid oscillation modes.  The fault
+surface is modeled by coupled double nodes, where the strength of the coupling
+is determined by a linear slip-weakening friction law.  External boundaries may
+be reflective or absorbing, where absorbing boundaries are handled using the
+method of perfectly matched layers (PML).  The hexahedral mesh can accommodate
+non-planar ruptures and surface topography</p>
+<p>SORD simulations are configured with Python scripts.  Underlying computations
+are coded in Fortran 95 and parallelized for multi-processor execution using
+Message Passing Interface (MPI).  The code is portable and tested with a
+variety of Fortran 95 compilers, MPI implementations, and operating systems
+(Linux, Mac OS X, IBM AIX, SUN Solaris).</p>
+</div>
+<div class="section" id="publications">
+<h3>Publications</h3>
+<p>The first two papers give (for wave propagation and spontaneous rupture,
+respectively) the formulation, numerical algorithm, and verification of the
+SORD method. The third paper presents an application to simulating earthquakes
+in southern California.</p>
+<p class="ref">Ely, G. P., S. M. Day, and J.-B. Minster (2008),
+<em>A support-operator method for visco-elastic wave modeling in 3D heterogeneous media</em>,
+Geophys. J. Int., <a class="reference external" href="http://www.blackwell-synergy.com/doi/abs/10.1111/j.1365-246X.2007.03633.x">172(1), 331-344</a>,
+doi: 10.1111/j.1365-246X.2007.03633.x.
+<a class="reference external" href="http://earth.usc.edu/~gely/pub/ely-som-20080426.pdf">[PDF]</a></p>
+<p class="ref">Ely, G. P., S. M. Day, and J.-B. Minster (2009),
+<em>A support-operator method for 3D rupture dynamics</em>,
+Geophys. J. Int.,
+<a class="reference external" href="http://www3.interscience.wiley.com/journal/122267744/abstract">177(3), 1140-1150</a>,
+doi:10.1111/j.1365-246X.2009.04117.x.
+<a class="reference external" href="http://earth.usc.edu/~gely/pub/ely-sord-20090504.pdf">[PDF]</a></p>
+<p class="ref">Ely, G. P., S. M. Day, and J.-B. Minster (2010),
+<em>Dynamic rupture models for the southern San Andreas fault</em>,
+BSSA, 100(1).
+<a class="reference external" href="http://earth.usc.edu/~gely/pub/ely-saf-20091030.pdf">[PDF]</a>
+<a class="reference external" href="http://earth.usc.edu/~gely/ely-saf-esupp.html">[Electronic supplement]</a></p>
+</div>
+<div class="section" id="user-guide">
+<h3>User Guide</h3>
+<div class="section" id="quick-test">
+<h4>Quick test</h4>
+<p>Run a simple point source explosion test and plot a 2D slice of particle
+velocity:</p>
+<pre class="literal-block">
+cd scripts/sord
+python example.py -i
+</pre>
+<p>Plotting requires Matplotlib, and the result should look like this:</p>
+<blockquote>
+<img alt="../scripts/sord/example.png" src="../scripts/sord/example.png" />
+</blockquote>
+</div>
+<div class="section" id="scripting-with-python">
+<h4>Scripting with Python</h4>
+<p>For a simple example consider the above test,
+<a class="reference external" href="../scripts/sord/example.py">sim.py</a>:</p>
+<pre class="literal-block">
+#!/usr/bin/env python
+import cst                                # import the Coseis module
+delta = 100.0, 100.0, 100.0, 0.0075       # step length in (x, y, z, t)
+shape = 61, 61, 61, 60                    # mesh size in (x, y, z, t)
+fieldio = [                               # field variable input and output
+    ( '=',  'rho', [], 2670.0 ),          # material density
+    ( '=',  'vp',  [], 6000.0 ),          # material P-wave velocity
+    ( '=',  'vs',  [], 3464.0 ),          # material S-wave velocity
+    ( '=',  'gam', [], 0.3    ),          # material viscosity
+    ( '=w', 'v1',  [0,0,31,-1], 'vx' ),   # write X velocity slice output
+    ( '=w', 'v2',  [0,0,31,-1], 'vy' ),   # write Y velocity slice output
+]
+ihypo = 31.0, 31.0, 31.0                  # source location
+source = 'potency'                        # source type
+source1 = 1e6, 1e6, 1e6                   # source normal components
+source2 = 0.0, 0.0, 0.0                   # source shear components
+timefunction = 'brune'                    # source time function
+period = 6 * delta[3]                     # source dominant period
+cst.sord.run( locals() )                  # launch SORD job
+
+# plotting
+import numpy as np
+import matplotlib.pyplot as plt
+n  = shape[1], shape[0]
+vx = np.fromfile( 'run/out/vx', 'f' ).reshape( n )
+vy = np.fromfile( 'run/out/vy', 'f' ).reshape( n )
+vm = np.sqrt( vx * vx + vy * vy )
+fig = plt.figure( figsize=(3,3) )
+ax = plt.gca()
+ax.imshow( vm, extent=(-3,3,-3,3), interpolation='nearest', vmax=1 )
+ax.axis( 'image' )
+fig.savefig( 'example.png', dpi=80 )
+
+
+</pre>
+<p>Every script starts by importing the <tt class="docutils literal">cst</tt> module.  SORD parameters are
+specified as a dictionary and/or keyword arguments passed to the
+<tt class="docutils literal">cst.sord.run()</tt> function. The <tt class="docutils literal">locals()</tt> built-in Python function is a
+convenient way to create the parameter dictionary from the local scope.  Any
+dictionary parameters</p>
+<p>A complete list of possible SORD parameters and default values are specified in
+<a class="reference external" href="../cst/sord/parameters.py">parameters.py</a>.</p>
+<p>FIXME: OUTDATED.</p>
+<p>The Python language gives a powerful way to construct SORD input.  For example,
+it may be desirable to specify the total simulation time, and divide by <tt class="docutils literal">dt</tt>
+to determine the number of time steps:</p>
+<pre class="literal-block">
+T = 100.0            # total time temporary variable
+nt = int( T / dt )   # number of time steps
+</pre>
+<p>The <tt class="docutils literal">T</tt> variable is not a valid SORD parameter; it is only used for temporary
+storage.  Variables with single single character names or names ending with an
+underscore, are ignored by SORD, so may be safely used for temporary storage.
+More example scripts can be found in the <tt class="docutils literal">scripts</tt> directory.</p>
+</div>
+<div class="section" id="running-jobs">
+<h4>Running jobs</h4>
+<p>The <tt class="docutils literal">cst.sord.run()</tt> function does four tasks: (1) configure job
+parameters (2) compile the source code if necessary (3) create a new run
+directory populated with executable code and input files, and (4) launch the
+job interactively or through a batch processing system.  Step (2) only occurs
+as needed for a fresh install or when the source code has been modified.  By
+default, step (4) is skipped, giving the user an opportunity to inspect the
+run directory prior to launching the job.</p>
+<p>FIXME: UNFINISHED SECTION.</p>
+<p>has been done beforehand, so is skipped.
+cop
+and
+called, a run directory is staged at the
+location set by the <tt class="docutils literal">rundir</tt> parameter (<tt class="docutils literal">tmp/</tt> in this case).  The
+directory contains the executable and scripts to run the code, and will contain
+all of the generated output and metadata.  You may examine the run directory
+and manually launch the executable from there.  The job can be run automatically</p>
+<p>Or, submit the job to the batch system</p>
+</div>
+<div class="section" id="field-i-o">
+<h4>Field I/O</h4>
+<p>Multidimensional field arrays can be accessed for input and output through the
+<tt class="docutils literal">fieldio</tt> list.  The <a class="reference external" href="../cst/sord/fieldnames.py">fieldnames.py</a> file
+specifies the list of available field variables, which are categorized in four
+ways: (1) static vs. dynamic, (2) settable vs. output only, (3) node vs. cell
+registration, and (4) volume vs. fault surface.  For example, density <tt class="docutils literal">rho</tt>
+is a static, settable, cell, volume variable.  Slip path length <tt class="docutils literal">sl</tt> is a
+dynamic, output, node, fault variable.  The <tt class="docutils literal">fieldio</tt> list is order dependent
+with subsequent inputs overwriting previous inputs.  So, for example, a field
+may be assigned to one value for the entire volume, followed by a different
+value for a sub-region of the volume.</p>
+<p>All field I/O operations require slice indices <tt class="docutils literal">[j,k,l,t]</tt>, which specify a
+four-dimensional sub-volume of the array in space and time.  Array indexing
+starts at 1 for the first node, and 1.5 for the first cell.  Negative indices
+count inward from end of the array, starting at -1 for the last node, and -1.5
+for the last cell.  Indices can be either a single index, a range <tt class="docutils literal">(start,
+end)</tt>, or a strided range <tt class="docutils literal">(start, end, step)</tt>.  Empty parentheses <tt class="docutils literal">()</tt> are
+shorthand for a full range.  Empty brackets <tt class="docutils literal">[]</tt> are shorthand for the entire
+4D volume.  Some examples of slice notation:</p>
+<pre class="literal-block">
+[10, 20, 1, (1,-1)]       # Single node, full time history
+[10.5, 20.5, 1.5, ()]     # Single cell, full time history
+[2, (), (), (1,-1,10)]    # j=2 node surface, every 10th time step
+[(), (), (), -1]          # Full 3D volume, last time step
+[]                        # Entire 4D volume
+</pre>
+<p>Each member of the <tt class="docutils literal">fieldio</tt> list contains a mode, a field name, and slice
+indices, followed by mode dependent parameters.  The following I/O modes are
+available, where <tt class="docutils literal">'f'</tt> is the field variable name (from the list
+<a class="reference external" href="../cst/sord/fieldnames.py">fieldnames.py</a>), and <tt class="docutils literal">[]</tt> are the slice indices:</p>
+<pre class="literal-block">
+('=',   'f', [], val),             # Set f to value
+('+',   'f', [], val),             # Add value to f
+('=s',  'f', [], val),             # Set f to random numbers in range (0, val)
+('=f',  'f', [], val, tfunc, T),   # Set f to time function with period T, scaled by val
+('=r',  'f', [], filename),        # Read from filename into f
+('=R',  'f', [], filename),        # Read from filename into f with exrapolation.
+('=w',  'f', [], filename),        # Write f to filename
+('=wi', 'f', [], filename),        # Write weighted average of f to filename.
+</pre>
+<p>A letter <tt class="docutils literal">'i'</tt> in the mode indicates sub-cell positioning via weighted
+averaging.  In this case the spatial indices are single logical coordinates
+that may vary continuously over the range.  The fractional part of the index
+determines the weights.  For example, an index of 3.2 to the 1D variable f
+would specify the weighted average: 0.8 * f(3) + 0.2 * f(4).</p>
+<p>Reading and writing to disk uses flat binary files where j is the fastest
+changing index, and t is the slowest changing index.  Mode 'R' extrapolates any
+singleton dimensions to fill the entire array.  This is useful for reading 1D
+or 2D models into 3D simulations, obviating the need to store (possibly very
+large) 3D material and mesh coordinate files.</p>
+<p>All input modes may use '+' instead of '=' to add to, rather than replace,
+preexisting values.  For a list of available time functions, see the
+<tt class="docutils literal">time_function</tt> subroutine in <a class="reference external" href="../cst/sord/src/util.f90">util.f90</a>.  The
+routine can be easily modified to add new time functions.  Time functions can
+be offset in time with the <tt class="docutils literal">tm0</tt> initial time parameter.</p>
+</div>
+<div class="section" id="boundary-conditions">
+<h4>Boundary Conditions</h4>
+<p>Boundary conditions for the six faces of the model domain are specified by the
+parameters <tt class="docutils literal">bc1</tt> (near-size, x, y, and z faces) and <tt class="docutils literal">bc2</tt> (far-side, x, y,
+and x faces).  The symmetry boundary conditions can be use to reduce
+computations for problems where they are applicable.  These are not used for
+specifying internal slip boundaries. However, for problems with symmetry across
+a slip surface, the fault may be placed at the boundary and combined with an
+anti-mirror symmetry condition.  The following BC types are supported:</p>
+<p><strong>Type 0</strong>: Vacuum free-surface.  Stress is zero in cells outside the boundary.</p>
+<blockquote>
+<img alt="bc0.png" src="bc0.png" />
+</blockquote>
+<p><strong>Type 3</strong>: Rigid surface. Displacement is zero at the boundary.</p>
+<blockquote>
+<img alt="bc3.png" src="bc3.png" />
+</blockquote>
+<p><strong>Type 1</strong>: Mirror symmetry at the node.  Normal displacement is zero at the
+boundary.  Useful for a boundary corresponding to (a) the plane orthogonal to
+the two nodal planes of a double-couple point source, (b) the plane normal to
+the mode-III axis of a symmetric rupture, or (c) the zero-width axis of a 2D
+plane strain problem.</p>
+<blockquote>
+<img alt="bc1.png" src="bc1.png" />
+</blockquote>
+<p><strong>Type -1</strong>: Anti-mirror symmetry at the node.  Tangential displacement is zero
+at the boundary.  Useful for a boundary corresponding to (a) the nodal planes
+of a double-couple point source, (b) the plane normal to the mode-II axis of a
+symmetric rupture, or (c) the zero-width axis of a 2D antiplane strain problem.</p>
+<blockquote>
+<img alt="bc-1.png" src="bc-1.png" />
+</blockquote>
+<p><strong>Type 2</strong>: Mirror symmetry at the cell. Same as type 1, but centered on the cell.</p>
+<blockquote>
+<img alt="bc2.png" src="bc2.png" />
+</blockquote>
+<p><strong>Type -2</strong>: Anti-mirror symmetry at the cell.  Same as type -1, but centered
+on the cell.  Can additionally be used when the boundary corresponds to the
+slip surface of a symmetric rupture.</p>
+<blockquote>
+<img alt="bc-2.png" src="bc-2.png" />
+</blockquote>
+<p><strong>Type 10</strong>: Perfectly match layer (PML) absorbing boundary.</p>
+<p>Example: a 3D problem with a free surface at Z=0, and PML absorbing boundaries
+on all other boundary faces:</p>
+<pre class="literal-block">
+nn  = 50, 50, 50
+bc1 = 10, 10,  0
+bc2 = 10, 10, 10
+</pre>
+<p>Example: a 2D antiplane strain problem with PML absorbing boundaries.  The
+number of nodes is 2 for the zero-width axis:</p>
+<pre class="literal-block">
+nn  = 50, 50,  2
+bc1 = 10, 10, -1
+bc2 = 10, 10, -1
+</pre>
+</div>
+<div class="section" id="defining-the-fault-rupture-surface">
+<h4>Defining the fault rupture surface</h4>
+<p>Fault rupture always follows a surface of the (possibly non-planar) logical
+mesh.  The orientation of the fault plane is defined by the <tt class="docutils literal">faultnormal</tt>
+parameter.  This can be either 1, 2, or 3 corresponding to surfaces normal to
+the j, k, or l logical mesh directions. Any other value (typically 0) disables
+rupture altogether. The location of the rupture plane with in the mesh is
+determined by the <tt class="docutils literal">ihypo</tt> parameter, which has a dual purpose of also
+defining the nucleation point. So, the indices of the collocated fault double
+nodes are given by <tt class="docutils literal">int(ihypo(faultnormal))</tt>, and <tt class="docutils literal">int(ihypo(faultnormal)) +
+1</tt>. For example, a 3D problem of dimensions 200.0 x 200.0 x 200.0, with a
+fault plane located at z = 100.0, and double nodes at l = (21, 22), may be set
+up as such:</p>
+<pre class="literal-block">
+dx = 5.0
+faultnormal = 3
+ihypo = 21, 21, 21.5
+nn  = 41, 41, 42
+bc1 = 0, 0, 0
+bc2 = 0, 0, 0
+</pre>
+<p>For problems with symmetry across the rupture surface (where mesh and material
+properties are mirror images), the symmetry may be exploited for computational
+savings by using an appropriate boundary condition and solving the elastic
+equations for only one side of the fault.  In this case, the fault double nodes
+must lie at the model boundary, and the and the cell-centered anti-mirror
+symmetry condition used.  For example, reducing the size of the previous
+example to put the rupture surface along the far z boundary:</p>
+<pre class="literal-block">
+nn = 41, 41, 22
+bc2 = 0, 0, -2
+</pre>
+<p>Alternatively, put the rupture surface along the near z boundary</p>
+<pre class="literal-block">
+ihypo = 21, 21, 1.5
+nn = 41, 41, 22
+bc1 = 0, 0, -2
+bc2 = 0, 0, 0
+</pre>
+<p>Further symmetries may present. If our previous problem has slip only in the
+x direction, then we may also use node-centered mirror symmetry along the in-plane
+axis, and node-centered anti-mirror symmetry along the anti-plane axis, to reduce
+computations eight-fold:</p>
+<pre class="literal-block">
+ihypo = 21, 21, 21.5
+nn = 21, 21, 22
+bc1 = 0, 0, 0
+bc2 = -1, 1, -2
+</pre>
+</div>
+</div>
+<div class="section" id="memory-usage-and-scaling">
+<h3>Memory Usage and Scaling</h3>
+<p>For rectilinear meshes, 23 single precision (four-byte) memory variables are
+required per mesh point.  Curvilinear meshes have two options with a trade-off
+in memory usage vs. floating-point operations.  Stored operators require 44
+variables per mesh point and give the best performance, while on-the-fly
+operators require 23 variables per mesh point at the cost of a factor of four
+increase in floating point operations.  As CPU improvement tends to out-pace
+memory bandwidth improvement, in the future, on-the-fly operators may become
+faster than stored operators.  The operator type is controlled by the
+<tt class="docutils literal">oplevel</tt> parameter, but can generally be left alone, as the default is to
+automatically detect rectilinear and curvilinear meshes and assign the proper
+operator type for fastest performance.</p>
+<p>On current hardware, computation time is on the order of the one second per
+time step per one million mesh points.  SORD scalability has been benchmarked
+up to 16 thousand processors at the TACC Ranger facility.  The following chart
+is the wall-time per step for 8 million mesh points per core (click for PDF):</p>
+<a class="reference external image-reference" href="../scripts/benchmark/sord-benchmark-ranger.pdf"><img alt="../scripts/benchmark/sord-benchmark-ranger.png" src="../scripts/benchmark/sord-benchmark-ranger.png" /></a>
+<p>This benchmark tests computation only. For many applications, disk output is
+the primary bottleneck and will limit scalability.</p>
+<div class="section" id="achieving-i-o-performance">
+<h4>Achieving I/O Performance</h4>
+<p>For computations with significant disk input and output, on large numbers of
+cores, domain decomposition layout is critical to performance.  The most
+important principle is to minimize partitioning of I/O amongst processes.  A
+best-case scenario is that a file is accessed by only a single processes.  The
+following example is used to illustrate.  Using 4096 cores, compute spontaneous
+rupture, outputting slip-velocity on the fault plane as well as vertical
+ground-motions at selected sites:</p>
+<pre class="literal-block">
+nproc3 = 1, 1024, 4                        # number of processes in j, k, l
+nn = 6000, 4000, 800                       # number of mesh nodes
+faultnormal = 2                            # fault normal to y-axis
+ihypo = 2000, 2000, 100                    # hypocenter indices
+i = (2000,4000), 2000, (1,160), (1,-1, 10) # fault output 4d region
+fieldio = [
+    ( '=w', 'sv1', i, 'slip-velocity-x' ),
+    ( '=w', 'sv2', i, 'slip-velocity-y' ),
+    ( '=w', 'sv3', i, 'slip-velocity-z' ),
+    ( '=w', 'v3', [2000, 1000, -1, ()], 'vz-station-1' ),
+    ( '=w', 'v3', [2000, 1500, -1, ()], 'vz-station-2' ),
+    ( '=w', 'v3', [2000, 2500, -1, ()], 'vz-station-3' ),
+    ( '=w', 'v3', [2000, 3000, -1, ()], 'vz-station-4' ),
+]
+</pre>
+<p>Here the problem has been partitioned (using nproc3) such that the entire fault
+output surface lies on a single process by making many thin slices parallel to
+the fault-plane, and placing the first vertical domain boundary below the depth
+of the fault output region.  The surface stations are located at a single node
+point, so they always naturally occur on a single process.  With this
+configuration no coordination is required amongst the processes, and all I/O
+occurs independently.</p>
+<p>To scale this problem to higher numbers of processes, we eventually must start
+partitioning the fault-plane I/O.  In that case, the second most important
+principle for designing domain decomposition is to minimize I/O striping.
+Striping is an alternating or cyclical pattern of access to file from multiple
+processes.  A best-case scenario is for each processes to accesses a contiguous
+section of a file, rather than many small segments.  The important thing to
+know about SORD is that I/O occurs in Fortran-contiguous order, where the first
+index changes fastest.  To scale up our example to 32,768 cores, we prevent
+striping by keeping the number of processes along the x-axis equal to one:</p>
+<pre class="literal-block">
+nproc3 = 1, 1024, 32
+</pre>
+<p>Some I/O layouts are not amenable to minimizing partitioning and striping.  An
+example is two orthogonal output planes, such as the fault surface in addition
+to the entire ground surface.  One solution to that situation is to run
+multiple computations for each of the desired outputs, with each optimally
+partitioned for the output.</p>
+<p>In cases where minimizing partitioning and striping does not achieve acceptable
+performance, depending on the system architecture, it may be useful to test
+non-collective MPI-IO by setting the parameter:</p>
+<pre class="literal-block">
+mpout = -1
+</pre>
+<p>When all else fails, another option is to turn off MPI-IO altogether with:</p>
+<pre class="literal-block">
+mpout = 0
+</pre>
+<p>In that case, each process writes a separate output file.  If you have been
+careful to minimize I/O striping, assembling the separate output files may be
+as simple as concatenating them together with the UNIX <tt class="docutils literal">cat</tt> utility.  This
+approach is limited by the capability of the file system to handle large
+numbers files.</p>
+</div>
+</div>
+<div class="section" id="development">
+<h3>Development</h3>
+<p>Suggestions for improvements, and contributions to the SORD code and
+documentation are greatly appreciated.</p>
+<div class="section" id="debugging">
+<h4>Debugging</h4>
+<p>The <tt class="docutils literal">debug</tt> input parameter is useful for finding problems, and can take the
+following values:</p>
+<blockquote>
+<p><strong>0</strong>: Debugging off.</p>
+<p><strong>1</strong>: Verbose status output.</p>
+<p><strong>2</strong>: Synchronize multiple processors. This is useful for tracking down MPI
+related bugs.</p>
+<p><strong>3</strong>: Dump field variable output in text files at every step. Only do this
+for small tests or you will fill up your disk!</p>
+</blockquote>
+<p>During testing, compiler checks, such as array overflow and floating-point
+exceptions, can be turned on with the <tt class="docutils literal"><span class="pre">-t</span></tt> or <tt class="docutils literal"><span class="pre">--testing</span></tt> option.
+Additionally, to compile and run under a debugger use the <tt class="docutils literal"><span class="pre">-g</span></tt> or
+<tt class="docutils literal"><span class="pre">--debugging</span></tt> option.  Naturally, these options depend on the capabilities of
+the particular compiler.  The specific flags passed to the compiler can be
+configured by editing <tt class="docutils literal">conf.py</tt>.</p>
+</div>
+<div class="section" id="profiling">
+<h4>Profiling</h4>
+<p>Internal code timings, for benchmarking performance, are collected and saved to
+the <tt class="docutils literal">prof/</tt> directory.  The file format is flat binary that can be examined
+with the UNIX command <tt class="docutils literal">od <span class="pre">-f</span></tt>.  Eight categories are timed for every time
+iteration step, and save in the following files:</p>
+<blockquote>
+<p><strong>1time</strong>: Time integration subroutine.</p>
+<p><strong>2stress</strong>: Stress subroutine.</p>
+<p><strong>3accel</strong>: Acceleration subroutine, including multiprocessor halo swapping
+communications.</p>
+<p><strong>4stats</strong>: Statistics subroutine, including multiprocessor min/max reductions.</p>
+<p><strong>5ckpt</strong>: Checkpoint subroutine.</p>
+<p><strong>6mp</strong>: Aggregate of all multiprocessor operations, including halo swap,
+global reductions, and parallel I/O.</p>
+<p><strong>7io</strong>: Aggregate of all input and output operations, including checkpointing
+and field I/O.</p>
+<p><strong>8step</strong>: Total for complete time iteration.</p>
+</blockquote>
+<p>Profiling can be very difficult to interpret for multiprocessor runs.  Timing
+is only saved for the master processor.  It can be helpful to synchronize the
+processors using <tt class="docutils literal">debug = 2</tt> to give more accurate relative timing values.</p>
+<p>Additionally, SORD can be run with compiler generated code profiling using the
+<tt class="docutils literal"><span class="pre">-p</span></tt> or <tt class="docutils literal"><span class="pre">--profiling</span></tt> option.</p>
+<!-- vim: filetype=rst -->
+</div>
+</div>
+</div>
+</body>
+</html>
