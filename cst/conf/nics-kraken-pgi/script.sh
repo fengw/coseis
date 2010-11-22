@@ -5,8 +5,8 @@
 #PBS -M %(email)s
 #PBS -l size=%(totalcores)s
 #PBS -l walltime=%(walltime)s
-#PBS -e %(rundir)s/%(name)s-err
-#PBS -o %(rundir)s/%(name)s-out
+#PBS -e stderr
+#PBS -o stdout
 #PBS -m abe
 #PBS -V
 
