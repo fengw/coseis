@@ -33,7 +33,7 @@ path = os.path.dirname( os.path.realpath( __file__ ) )
 for target in args:
     if target == 'build':
         cst.sord._build()
-        cst.cvm._build()
+        #cst.cvm._build()
         cst.fkernel._build()
         cst._build()
     elif target == 'test':
